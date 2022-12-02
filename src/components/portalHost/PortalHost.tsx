@@ -3,7 +3,7 @@ import { usePortalState } from '../../hooks/usePortalState';
 import { usePortal } from '../../hooks/usePortal';
 import type { PortalHostProps } from './types';
 
-const PortalHostComponent = ({ name }: PortalHostProps) => {
+const PortalHostComponent = ({ name, disableUnmount }: PortalHostProps & { disableUnmount?: boolean }) => {
   //#region hooks
   const state = usePortalState(name);
   const { registerHost, deregisterHost } = usePortal(name);
@@ -13,7 +13,7 @@ const PortalHostComponent = ({ name }: PortalHostProps) => {
   useEffect(() => {
     registerHost();
     return () => {
-      deregisterHost();
+      if (!disableUnmount) deregisterHost();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
